@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stat Dose Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-border: #334155;
+    --primary: #38bdf8;
+    --primary-glow: rgba(56, 189, 248, 0.15);
+    --accent: #f472b6;
+    --accent-glow: rgba(244, 114, 182, 0.12);
+    --text: #f1f5f9;
+    --text-dim: #94a3b8;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+  }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .input-section {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-group:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  label .hint {
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  /* Frequency buttons */
+  .freq-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .freq-btn {
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 12px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .freq-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-glow);
+  }
+
+  .freq-btn.active {
+    border-color: var(--primary);
+    background: var(--primary-glow);
+    color: var(--primary);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+  }
+
+  .freq-btn .label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  .freq-btn.active .label {
+    color: var(--primary);
+  }
+
+  /* Time input */
+  .time-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .time-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .time-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+  }
+
+  .now-btn {
+    background: linear-gradient(135deg, var(--primary), #818cf8);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 14px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .now-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+  }
+
+  .now-btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Calculate button */
+  .calc-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    padding: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.5px;
+  }
+
+  .calc-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.25);
+  }
+
+  .calc-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Results */
+  .result-section {
+    display: none;
+    animation: slideUp 0.4s ease;
+  }
+
+  .result-section.show {
+    display: block;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+
+  .result-title {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .next-dose-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--success);
+    padding: 8px 0;
+    text-shadow: 0 0 30px rgba(52, 211, 153, 0.3);
+  }
+
+  .next-dose-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  }
+
+  .timeline-item:last-child {
+    border-bottom: none;
+  }
+
+  .dose-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .dose-num.stat {
+    background: var(--accent);
+    color: white;
+  }
+
+  .dose-num.next {
+    background: var(--success);
+    color: white;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
+  }
+
+  .dose-num.regular {
+    background: var(--card-border);
+    color: var(--text-dim);
+  }
+
+  .dose-info {
+    flex: 1;
+  }
+
+  .dose-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .dose-label.stat-label {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .dose-label.next-label {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  .dose-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .dose-time.stat-time {
+    color: var(--accent);
+  }
+
+  .dose-time.next-time {
+    color: var(--success);
+  }
+
+  .explanation {
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .explanation strong {
+    color: var(--primary);
+  }
+
+  .rule-tag {
+    display: inline-block;
+    background: var(--primary-glow);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-left: 4px;
+  }
+
+  footer {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>💊 Stat Dose Calculator</h1>
+  <p class="subtitle">คำนวณเวลา dose ถัดไปหลัง stat dose (หลัก 2/3 ของ interval)</p>
+
+  <div class="input-section">
+    <div class="input-group">
+      <label>ความถี่การให้ยา (Frequency)</label>
+      <div class="freq-options">
+        <button class="freq-btn" data-freq="24" onclick="selectFreq(this)">OD<span class="label">10/22</span></button>
+        <button class="freq-btn" data-freq="12" onclick="selectFreq(this)">q 12h<span class="label">BID</span></button>
+        <button class="freq-btn" data-freq="8" onclick="selectFreq(this)">q 8h<span class="label">TID</span></button>
+        <button class="freq-btn" data-freq="6" onclick="selectFreq(this)">q 6h<span class="label">QID</span></button>
+        <button class="freq-btn" data-freq="4" onclick="selectFreq(this)">q 4h<span class="label">6x/d</span></button>
+        <button class="freq-btn" data-freq="2" onclick="selectFreq(this)">q 2h<span class="label">12x/d</span></button>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>เวลาที่สั่ง Stat dose <span class="hint">(รูปแบบ HH:MM น. แบบ 24 ชม.)</span></label>
+      <div class="time-input-wrap">
+        <input type="time" class="time-input" id="statTime" value="">
+        <button class="now-btn" onclick="setNow()">⏱ ตอนนี้</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">คำนวณเวลา Dose ถัดไป</button>
+
+  <div class="result-section" id="resultSection">
+    <div class="result-card">
+      <div class="result-title">⏰ Dose ถัดไป (Next Scheduled Dose)</div>
+      <div class="next-dose-time" id="nextDoseTime">--:--</div>
+      <div class="next-dose-note" id="nextDoseNote"></div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-title">📋 ตารางเวลาให้ยาทั้งหมดใน 24 ชม.</div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+
+    <div class="explanation" id="explanation"></div>
+  </div>
+</div>
+
+<footer>
+  อ้างอิง: หลักการ 2/3 ของ interval สำหรับกำหนด dose ถัดไปหลัง stat dose<br>
+  ห้องยาผู้ป่วยใน โรงพยาบาลพระนครศรีอยุธยา
+</footer>
+
+<script>
+  let selectedFreq = null;
+
+  function selectFreq(btn) {
+    document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedFreq = parseInt(btn.dataset.freq);
+  }
+
+  function setNow() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('statTime').value = `${hh}:${mm}`;
+  }
+
+  function formatTime(totalMinutes) {
+    let m = ((totalMinutes % 1440) + 1440) % 1440;
+    const hh = String(Math.floor(m / 60)).padStart(2, '0');
+    const mm = String(m % 60).padStart(2, '0');
+    return `${hh}:${mm}`;
+  }
+
+  // Find nearest standard time at or after a given minute
+  function findNearestStandard(minuteOfDay, intervalHours) {
+    const intervalMin = intervalHours * 60;
+    // Standard times for each frequency based on hospital convention
+    const standardTimes = getStandardTimes(intervalHours);
+
+    // Find the first standard time that is >= minuteOfDay
+    for (let day = 0; day < 2; day++) {
+      for (const st of standardTimes) {
+        const candidate = st + day * 1440;
+        if (candidate >= minuteOfDay) {
+          return candidate % 1440;
+        }
+      }
+    }
+    return standardTimes[0];
+  }
+
+  function getStandardTimes(intervalHours) {
+    // Standard times (minutes from midnight) ตามตำราโรงพยาบาล
+    switch (intervalHours) {
+      case 24: return [10*60, 22*60];                                                                         // OD: 10:00, 22:00
+      case 12: return [6*60, 18*60];                                                                          // q12h: 06:00, 18:00
+      case 8:  return [6*60, 14*60, 22*60];                                                                   // q8h: 06:00, 14:00, 22:00
+      case 6:  return [6*60, 12*60, 18*60, 24*60];                                                           // q6h: 06:00, 12:00, 18:00, 24:00
+      case 4:  return [2*60, 6*60, 10*60, 14*60, 18*60, 22*60];                                              // q4h: 02,06,10,14,18,22
+      case 2:  return [2*60,4*60,6*60,8*60,10*60,12*60,14*60,16*60,18*60,20*60,22*60,24*60];                 // q2h: ทุก 2 ชม.
+      default: return [6*60];
+    }
+  }
+
+  function getStandardTimesFormatted(intervalHours) {
+    return getStandardTimes(intervalHours).map(m => formatTime(m));
+  }
+
+  function calculate() {
+    const timeVal = document.getElementById('statTime').value;
+    if (!selectedFreq || !timeVal) {
+      alert('กรุณาเลือกความถี่ และใส่เวลา stat dose');
+      return;
+    }
+
+    const [hh, mm] = timeVal.split(':').map(Number);
+    const statMinutes = hh * 60 + mm;
+    const intervalMinutes = selectedFreq * 60;
+    const twoThirds = Math.round(intervalMinutes * 2 / 3);
+
+    // ตามภาพ: stat dose ที่เวลา X → บวก 2/3 interval → หา standard time ที่ >= ผลลัพธ์
+    const earliestNext = statMinutes + twoThirds;
+    const standardTimes = getStandardTimes(selectedFreq);
+
+    // หา standard time แรกที่ >= earliestNext (วนรอบ 2 วัน)
+    let nextDoseMin = null;
+    let nextDoseIsNextDay = false;
+    for (let day = 0; day < 2; day++) {
+      for (const st of standardTimes) {
+        const candidate = st + day * 1440;
+        if (candidate >= earliestNext) {
+          nextDoseMin = candidate % 1440;
+          nextDoseIsNextDay = day === 1 || (day === 0 && nextDoseMin < statMinutes && earliestNext > statMinutes);
+          break;
+        }
+      }
+      if (nextDoseMin !== null) break;
+    }
+    if (nextDoseMin === null) { nextDoseMin = standardTimes[0]; nextDoseIsNextDay = true; }
+
+    // หา index ของ next dose ใน standardTimes
+    let nextIdx = standardTimes.indexOf(nextDoseMin);
+
+    // Display
+    const nextTimeStr = formatTime(nextDoseMin);
+    document.getElementById('nextDoseTime').textContent = nextTimeStr + ' น.';
+    document.getElementById('nextDoseNote').textContent = nextDoseIsNextDay ? '(วันถัดไป)' : '(วันเดียวกัน)';
+
+    // Build timeline
+    const timeline = document.getElementById('timeline');
+    timeline.innerHTML = '';
+    addTimelineItem(timeline, 'Stat dose', formatTime(statMinutes), 'stat');
+    addTimelineItem(timeline, 'Dose ถัดไป', nextTimeStr + (nextDoseIsNextDay ? ' (+1)' : ''), 'next');
+
+    // doses ต่อจากนั้นตาม standard schedule
+    const maxExtra = Math.min(Math.floor(24 / selectedFreq), 5);
+    for (let i = 1; i <= maxExtra; i++) {
+      const idx = (nextIdx + i) % standardTimes.length;
+      const isOver = (nextIdx + i) >= standardTimes.length;
+      addTimelineItem(timeline, 'Dose #' + (i + 2), formatTime(standardTimes[idx]) + (isOver ? ' (+1)' : ''), 'regular');
+    }
+
+    // Explanation
+    const twoThirdsHours = twoThirds / 60;
+    const twoThirdsDisplay = Number.isInteger(twoThirdsHours) ? twoThirdsHours : twoThirdsHours.toFixed(1);
+    document.getElementById('explanation').innerHTML =
+      `<strong>หลักการ (ตามตำรา):</strong> ยาสั่ง <strong>q ${selectedFreq}h</strong> → interval = ${selectedFreq} ชม.<br>` +
+      `2/3 ของ interval = <strong>${twoThirdsDisplay} ชม. (${twoThirds} นาที)</strong> <span class="rule-tag">กฎ 2/3</span><br><br>` +
+      `Stat dose ให้เวลา <strong>${formatTime(statMinutes)} น.</strong><br>` +
+      `Stat + 2/3 interval = ${formatTime(statMinutes)} + ${twoThirdsDisplay} ชม. = <strong>${formatTime(earliestNext)} น.</strong><br>` +
+      `→ หา Standard time แรกที่ ≥ เวลานั้น = <strong>${nextTimeStr} น.</strong><br>` +
+      `→ นับ dose ต่อไปตาม standard schedule ปกติ<br><br>` +
+      `<strong>Standard times q ${selectedFreq}h:</strong> ${getStandardTimesFormatted(selectedFreq).join(', ')} น.`;
+
+    // Show results
+    const resultSection = document.getElementById('resultSection');
+    resultSection.classList.remove('show');
+    void resultSection.offsetWidth;
+    resultSection.classList.add('show');
+  }
+
+  function addTimelineItem(container, label, time, type) {
+    const item = document.createElement('div');
+    item.className = 'timeline-item';
+
+    const numClass = type === 'stat' ? 'stat' : type === 'next' ? 'next' : 'regular';
+    const icon = type === 'stat' ? '⚡' : type === 'next' ? '→' : '•';
+    const labelClass = type === 'stat' ? 'stat-label' : type === 'next' ? 'next-label' : '';
+    const timeClass = type === 'stat' ? 'stat-time' : type === 'next' ? 'next-time' : '';
+
+    item.innerHTML = `
+      <div class="dose-num ${numClass}">${icon}</div>
+      <div class="dose-info">
+        <div class="dose-label ${labelClass}">${label}</div>
+      </div>
+      <div class="dose-time ${timeClass}">${time} น.</div>
+    `;
+    container.appendChild(item);
+  }
+
+  // Set default time to now
+  setNow();
+</script>
+
+</body>
+</html>
