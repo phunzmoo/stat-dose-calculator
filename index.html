@@ -20,6 +20,8 @@
     --text-dim: #94a3b8;
     --success: #34d399;
     --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.1);
+    --warning-border: rgba(251, 191, 36, 0.4);
     --danger: #f87171;
   }
 
@@ -86,7 +88,6 @@
     color: #64748b;
   }
 
-  /* Frequency buttons */
   .freq-options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -131,7 +132,78 @@
     color: var(--primary);
   }
 
-  /* Time input */
+  /* Drug section */
+  .drug-section {
+    background: rgba(244, 114, 182, 0.05);
+    border: 1px dashed rgba(244, 114, 182, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .drug-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .drug-section-hint {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .drug-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    padding: 10px 14px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .drug-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .category-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .cat-btn {
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .cat-btn:hover {
+    border-color: var(--accent);
+  }
+
+  .cat-btn.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+
   .time-input-wrap {
     display: flex;
     align-items: center;
@@ -182,7 +254,6 @@
     transform: scale(0.97);
   }
 
-  /* Calculate button */
   .calc-btn {
     width: 100%;
     background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -206,6 +277,62 @@
 
   .calc-btn:active {
     transform: translateY(0);
+  }
+
+  /* Drug Alert */
+  .drug-alert {
+    display: none;
+    background: var(--warning-bg);
+    border: 2px solid var(--warning-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    animation: slideUp 0.3s ease;
+  }
+
+  .drug-alert.show {
+    display: block;
+  }
+
+  .alert-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .alert-icon {
+    font-size: 1.4rem;
+  }
+
+  .alert-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--warning);
+  }
+
+  .alert-body {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .alert-body strong {
+    color: var(--warning);
+  }
+
+  .alert-rule {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .alert-rule .recommended {
+    color: var(--success);
+    font-weight: 600;
   }
 
   /* Results */
@@ -260,6 +387,11 @@
     text-shadow: 0 0 30px rgba(52, 211, 153, 0.3);
   }
 
+  .next-dose-time.exception {
+    color: var(--warning);
+    text-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+  }
+
   .next-dose-note {
     text-align: center;
     font-size: 0.85rem;
@@ -267,7 +399,6 @@
     margin-top: 4px;
   }
 
-  /* Timeline */
   .timeline {
     display: flex;
     flex-direction: column;
@@ -298,41 +429,16 @@
     flex-shrink: 0;
   }
 
-  .dose-num.stat {
-    background: var(--accent);
-    color: white;
-  }
+  .dose-num.stat { background: var(--accent); color: white; }
+  .dose-num.next { background: var(--success); color: white; box-shadow: 0 0 12px rgba(52, 211, 153, 0.4); }
+  .dose-num.next.exception { background: var(--warning); box-shadow: 0 0 12px rgba(251, 191, 36, 0.4); }
+  .dose-num.regular { background: var(--card-border); color: var(--text-dim); }
 
-  .dose-num.next {
-    background: var(--success);
-    color: white;
-    box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
-  }
-
-  .dose-num.regular {
-    background: var(--card-border);
-    color: var(--text-dim);
-  }
-
-  .dose-info {
-    flex: 1;
-  }
-
-  .dose-label {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    font-weight: 300;
-  }
-
-  .dose-label.stat-label {
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-  .dose-label.next-label {
-    color: var(--success);
-    font-weight: 600;
-  }
+  .dose-info { flex: 1; }
+  .dose-label { font-size: 0.8rem; color: var(--text-dim); font-weight: 300; }
+  .dose-label.stat-label { color: var(--accent); font-weight: 600; }
+  .dose-label.next-label { color: var(--success); font-weight: 600; }
+  .dose-label.next-label.exception { color: var(--warning); }
 
   .dose-time {
     font-family: 'JetBrains Mono', monospace;
@@ -340,13 +446,9 @@
     font-weight: 600;
   }
 
-  .dose-time.stat-time {
-    color: var(--accent);
-  }
-
-  .dose-time.next-time {
-    color: var(--success);
-  }
+  .dose-time.stat-time { color: var(--accent); }
+  .dose-time.next-time { color: var(--success); }
+  .dose-time.next-time.exception { color: var(--warning); }
 
   .explanation {
     background: rgba(56, 189, 248, 0.08);
@@ -359,9 +461,7 @@
     line-height: 1.7;
   }
 
-  .explanation strong {
-    color: var(--primary);
-  }
+  .explanation strong { color: var(--primary); }
 
   .rule-tag {
     display: inline-block;
@@ -375,6 +475,50 @@
     margin-left: 4px;
   }
 
+  .rule-tag.exception {
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+    color: var(--warning);
+  }
+
+  /* Decision buttons */
+  .decision-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .decision-btn {
+    border: 1.5px solid;
+    border-radius: 10px;
+    padding: 10px 8px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s;
+  }
+
+  .decision-btn.use-exception {
+    border-color: var(--warning);
+    color: var(--warning);
+  }
+
+  .decision-btn.use-exception:hover {
+    background: var(--warning-bg);
+  }
+
+  .decision-btn.use-23 {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .decision-btn.use-23:hover {
+    background: var(--primary-glow);
+  }
+
   footer {
     margin-top: 28px;
     text-align: center;
@@ -382,13 +526,28 @@
     color: #475569;
     line-height: 1.6;
   }
+
+  .disclaimer {
+    background: rgba(248, 113, 113, 0.05);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .disclaimer strong {
+    color: var(--danger);
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
   <h1>💊 Stat Dose Calculator</h1>
-  <p class="subtitle">คำนวณเวลา dose ถัดไปหลัง stat dose (หลัก 2/3 ของ interval)</p>
+  <p class="subtitle">คำนวณเวลา dose ถัดไปหลัง stat dose (หลัก 2/3 ของ interval + drug exceptions)</p>
 
   <div class="input-section">
     <div class="input-group">
@@ -404,44 +563,158 @@
     </div>
 
     <div class="input-group">
-      <label>เวลาที่สั่ง Stat dose <span class="hint">(รูปแบบ HH:MM น. แบบ 24 ชม.)</span></label>
+      <label>เวลาที่สั่ง Stat dose <span class="hint">(HH:MM 24 ชม.)</span></label>
       <div class="time-input-wrap">
         <input type="time" class="time-input" id="statTime" value="">
         <button class="now-btn" onclick="setNow()">⏱ ตอนนี้</button>
+      </div>
+    </div>
+
+    <div class="drug-section">
+      <div class="drug-section-title">🔍 ตรวจสอบยาพิเศษ (ไม่บังคับ)</div>
+      <div class="drug-section-hint">
+        ยาบางกลุ่มไม่ใช้กฎ 2/3 → ใส่ชื่อยา หรือเลือก category เพื่อตรวจสอบ
+      </div>
+      <input type="text" class="drug-input" id="drugName" placeholder="พิมพ์ชื่อยา เช่น vancomycin, gentamicin..." oninput="onDrugInput()">
+      <div class="category-options">
+        <button class="cat-btn" data-cat="aminoglycoside" onclick="selectCat(this)">Aminoglycoside</button>
+        <button class="cat-btn" data-cat="vancomycin" onclick="selectCat(this)">Vancomycin</button>
+        <button class="cat-btn" data-cat="betalactam" onclick="selectCat(this)">Beta-lactam</button>
+        <button class="cat-btn" data-cat="phenytoin" onclick="selectCat(this)">Phenytoin</button>
+        <button class="cat-btn" data-cat="digoxin" onclick="selectCat(this)">Digoxin</button>
+        <button class="cat-btn active" data-cat="other" onclick="selectCat(this)">อื่นๆ (2/3)</button>
       </div>
     </div>
   </div>
 
   <button class="calc-btn" onclick="calculate()">คำนวณเวลา Dose ถัดไป</button>
 
+  <div class="drug-alert" id="drugAlert">
+    <div class="alert-header">
+      <span class="alert-icon">⚠️</span>
+      <span class="alert-title" id="alertTitle">ยากลุ่มพิเศษ</span>
+    </div>
+    <div class="alert-body" id="alertBody"></div>
+    <div class="alert-rule" id="alertRule"></div>
+    <div class="decision-buttons">
+      <button class="decision-btn use-exception" onclick="applyDecision('exception')">ใช้ rule พิเศษ</button>
+      <button class="decision-btn use-23" onclick="applyDecision('twothirds')">ใช้ 2/3 ตามปกติ</button>
+    </div>
+  </div>
+
   <div class="result-section" id="resultSection">
     <div class="result-card">
-      <div class="result-title">⏰ Dose ถัดไป (Next Scheduled Dose)</div>
+      <div class="result-title" id="resultTitle">⏰ Dose ถัดไป</div>
       <div class="next-dose-time" id="nextDoseTime">--:--</div>
       <div class="next-dose-note" id="nextDoseNote"></div>
     </div>
 
     <div class="result-card">
-      <div class="result-title">📋 ตารางเวลาให้ยาทั้งหมดใน 24 ชม.</div>
+      <div class="result-title">📋 ตารางเวลาให้ยา</div>
       <div class="timeline" id="timeline"></div>
     </div>
 
     <div class="explanation" id="explanation"></div>
   </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ ข้อควรระวัง:</strong> ระบบนี้เป็นเครื่องมือช่วยคำนวณเบื้องต้น ผลลัพธ์ต้องผ่านการพิจารณาของเภสัชกร/แพทย์ก่อนนำไปใช้ทุกครั้ง โดยคำนึงถึง renal function, drug interaction, indication และปัจจัยทางคลินิกอื่นๆ ของผู้ป่วย
+  </div>
 </div>
 
 <footer>
-  อ้างอิง: หลักการ 2/3 ของ interval สำหรับกำหนด dose ถัดไปหลัง stat dose<br>
+  อ้างอิง: หลัก 2/3 ของ interval + drug-specific exceptions<br>
   ห้องยาผู้ป่วยใน โรงพยาบาลพระนครศรีอยุธยา
 </footer>
 
 <script>
   let selectedFreq = null;
+  let selectedCategory = 'other';
+  let pendingCalculation = null;
+
+  const drugDatabase = {
+    aminoglycoside: ['gentamicin', 'gentamycin', 'amikacin', 'tobramycin', 'streptomycin', 'netilmicin', 'kanamycin'],
+    vancomycin: ['vancomycin', 'vanco'],
+    betalactam: ['penicillin', 'ampicillin', 'amoxicillin', 'cloxacillin', 'piperacillin', 'tazobactam', 'cefazolin', 'ceftriaxone', 'ceftazidime', 'cefepime', 'cefotaxime', 'ceftaroline', 'meropenem', 'imipenem', 'ertapenem', 'doripenem', 'aztreonam', 'oxacillin', 'nafcillin'],
+    phenytoin: ['phenytoin', 'dilantin', 'fosphenytoin'],
+    digoxin: ['digoxin', 'lanoxin']
+  };
+
+  const categoryInfo = {
+    aminoglycoside: {
+      name: 'Aminoglycosides',
+      icon: '💉',
+      rule: 'Extended-interval dosing (ODA): next dose ที่ 24 ชม. หลัง loading dose',
+      rationale: 'อาศัย post-antibiotic effect (PAE) และลดความเป็นพิษต่อไต/หู → ให้ q24h ในผู้ป่วย renal function ปกติ',
+      caution: 'ถ้าสั่งแบบ traditional dosing (q8h, q12h) → ใช้ 2/3 rule ปกติ; ถ้า renal impairment → ปรับตาม CrCl',
+      hours: 24
+    },
+    vancomycin: {
+      name: 'Vancomycin',
+      icon: '🧬',
+      rule: 'หลัง loading dose: next dose = full interval ตามที่สั่ง (เช่น q8h, q12h)',
+      rationale: 'Loading dose ทำให้ได้ therapeutic level เร็ว → maintenance ให้ตาม full interval ไม่ต้องร่น',
+      caution: 'ติดตาม trough level ก่อน dose ที่ 4 (steady state); ปรับตาม renal function',
+      hours: null
+    },
+    betalactam: {
+      name: 'Beta-lactams',
+      icon: '🦠',
+      capToLatest: true,  // ใช้ standard schedule แต่ห้ามเกิน latest_time (stat + full interval)
+      rule: 'Align กับ standard schedule แต่ next dose ต้อง ≤ latest_time (stat + full interval)',
+      rationale: 'Time-dependent antibiotic; maintain %Time > MIC → ห้าม delay เกิน full interval',
+      caution: 'ห้ามใช้ 2/3 rule; Early dosing OK ถ้า align กับ standard schedule; ห้าม delay เกิน full interval',
+      hours: null
+    },
+    phenytoin: {
+      name: 'Phenytoin',
+      icon: '🧠',
+      rule: 'หลัง loading dose (15-20 mg/kg): maintenance dose ที่ 8-12 ชม. หลัง loading',
+      rationale: 'Loading dose ทำให้ได้ therapeutic level → maintenance เริ่มที่ 8-12 ชม. (Vd กระจายเสร็จ)',
+      caution: 'ติดตาม level + monitor cardiac/CNS toxicity; ใช้ corrected level ถ้า hypoalbuminemia',
+      hours: 12
+    },
+    digoxin: {
+      name: 'Digoxin',
+      icon: '❤️',
+      rule: 'Rapid digitalization: maintenance dose อย่างน้อย 24 ชม. หลัง loading dose สุดท้าย',
+      rationale: 'Loading dose แบ่งให้ทุก 6-8 ชม. รวม ~24 ชม. → maintenance เริ่ม ~24 ชม. หลัง first loading',
+      caution: 'Narrow therapeutic index; ตรวจ K+, Mg2+, renal function; ระวัง drug interactions',
+      hours: 24
+    }
+  };
 
   function selectFreq(btn) {
     document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectedFreq = parseInt(btn.dataset.freq);
+  }
+
+  function selectCat(btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedCategory = btn.dataset.cat;
+  }
+
+  function onDrugInput() {
+    const name = document.getElementById('drugName').value.toLowerCase().trim();
+    if (!name) return;
+
+    for (const [cat, drugs] of Object.entries(drugDatabase)) {
+      for (const d of drugs) {
+        if (name.includes(d)) {
+          document.querySelectorAll('.cat-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.cat === cat);
+          });
+          selectedCategory = cat;
+          return;
+        }
+      }
+    }
+    document.querySelectorAll('.cat-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === 'other');
+    });
+    selectedCategory = 'other';
   }
 
   function setNow() {
@@ -458,33 +731,14 @@
     return `${hh}:${mm}`;
   }
 
-  // Find nearest standard time at or after a given minute
-  function findNearestStandard(minuteOfDay, intervalHours) {
-    const intervalMin = intervalHours * 60;
-    // Standard times for each frequency based on hospital convention
-    const standardTimes = getStandardTimes(intervalHours);
-
-    // Find the first standard time that is >= minuteOfDay
-    for (let day = 0; day < 2; day++) {
-      for (const st of standardTimes) {
-        const candidate = st + day * 1440;
-        if (candidate >= minuteOfDay) {
-          return candidate % 1440;
-        }
-      }
-    }
-    return standardTimes[0];
-  }
-
   function getStandardTimes(intervalHours) {
-    // Standard times (minutes from midnight) ตามตำราโรงพยาบาล
     switch (intervalHours) {
-      case 24: return [10*60, 22*60];                                                                         // OD: 10:00, 22:00
-      case 12: return [6*60, 18*60];                                                                          // q12h: 06:00, 18:00
-      case 8:  return [6*60, 14*60, 22*60];                                                                   // q8h: 06:00, 14:00, 22:00
-      case 6:  return [6*60, 12*60, 18*60, 24*60];                                                           // q6h: 06:00, 12:00, 18:00, 24:00
-      case 4:  return [2*60, 6*60, 10*60, 14*60, 18*60, 22*60];                                              // q4h: 02,06,10,14,18,22
-      case 2:  return [2*60,4*60,6*60,8*60,10*60,12*60,14*60,16*60,18*60,20*60,22*60,24*60];                 // q2h: ทุก 2 ชม.
+      case 24: return [10*60, 22*60];
+      case 12: return [6*60, 18*60];
+      case 8:  return [6*60, 14*60, 22*60];
+      case 6:  return [6*60, 12*60, 18*60, 24*60];
+      case 4:  return [2*60, 6*60, 10*60, 14*60, 18*60, 22*60];
+      case 2:  return [2*60,4*60,6*60,8*60,10*60,12*60,14*60,16*60,18*60,20*60,22*60,24*60];
       default: return [6*60];
     }
   }
@@ -500,80 +754,266 @@
       return;
     }
 
+    document.getElementById('drugAlert').classList.remove('show');
+    document.getElementById('resultSection').classList.remove('show');
+
     const [hh, mm] = timeVal.split(':').map(Number);
     const statMinutes = hh * 60 + mm;
+    pendingCalculation = { statMinutes };
+
+    if (selectedCategory !== 'other') {
+      showDrugAlert();
+    } else {
+      doCalculation('twothirds');
+    }
+  }
+
+  function showDrugAlert() {
+    const info = categoryInfo[selectedCategory];
+    if (!info) {
+      doCalculation('twothirds');
+      return;
+    }
+
+    const drugName = document.getElementById('drugName').value.trim();
+    const displayName = drugName ? `${drugName} (${info.name})` : info.name;
+
+    document.getElementById('alertTitle').textContent = `${info.icon} ตรวจพบยากลุ่มพิเศษ: ${displayName}`;
+    document.getElementById('alertBody').innerHTML =
+      `<strong>ยากลุ่มนี้ไม่ควรใช้กฎ 2/3</strong><br>` +
+      `เหตุผลทางคลินิก: ${info.rationale}<br><br>` +
+      `<strong>ข้อควรระวัง:</strong> ${info.caution}`;
+
+    document.getElementById('alertRule').innerHTML =
+      `<strong>คำแนะนำ:</strong> <span class="recommended">${info.rule}</span>`;
+
+    document.getElementById('drugAlert').classList.add('show');
+    setTimeout(() => {
+      document.getElementById('drugAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }
+
+  function applyDecision(rule) {
+    document.getElementById('drugAlert').classList.remove('show');
+    doCalculation(rule);
+  }
+
+  function doCalculation(ruleType) {
+    if (!pendingCalculation) return;
+    const { statMinutes } = pendingCalculation;
     const intervalMinutes = selectedFreq * 60;
-    const twoThirds = Math.round(intervalMinutes * 2 / 3);
-
-    // ตามภาพ: stat dose ที่เวลา X → บวก 2/3 interval → หา standard time ที่ >= ผลลัพธ์
-    const earliestNext = statMinutes + twoThirds;
     const standardTimes = getStandardTimes(selectedFreq);
+    const isException = (ruleType === 'exception' && selectedCategory !== 'other');
 
-    // หา standard time แรกที่ >= earliestNext (วนรอบ 2 วัน)
     let nextDoseMin = null;
     let nextDoseIsNextDay = false;
-    for (let day = 0; day < 2; day++) {
-      for (const st of standardTimes) {
-        const candidate = st + day * 1440;
-        if (candidate >= earliestNext) {
-          nextDoseMin = candidate % 1440;
-          nextDoseIsNextDay = day === 1 || (day === 0 && nextDoseMin < statMinutes && earliestNext > statMinutes);
-          break;
+    let earliestNext;
+    let ruleDescription;
+
+    let isCapToLatest = false;  // Beta-lactam mode: align กับ standard time แต่ห้ามเกิน latest_time
+    let cappedAtLatest = false;  // flag ว่าใช้ latest_time แทน standard time
+    let latestTimeTotal = null;  // latest allowable time (absolute minutes)
+
+    if (isException) {
+      const info = categoryInfo[selectedCategory];
+      isCapToLatest = info.capToLatest === true;
+      if (info.hours !== null) {
+        earliestNext = statMinutes + info.hours * 60;
+        ruleDescription = `Stat + ${info.hours} ชม. (rule พิเศษของ ${info.name})`;
+      } else {
+        earliestNext = statMinutes + intervalMinutes;
+        ruleDescription = `Stat + full interval (${selectedFreq} ชม.) สำหรับ ${info.name}`;
+      }
+    } else {
+      const twoThirds = Math.round(intervalMinutes * 2 / 3);
+      earliestNext = statMinutes + twoThirds;
+      const tt = twoThirds / 60;
+      ruleDescription = `Stat + 2/3 interval (${Number.isInteger(tt) ? tt : tt.toFixed(1)} ชม.)`;
+    }
+
+    if (isCapToLatest) {
+      // Beta-lactam logic:
+      // 1. latest_time = stat + full interval
+      // 2. หา standard time ล่าสุด (สูงสุด) ที่ ≤ latest_time AND > statMinutes
+      // 3. ถ้าไม่มี standard time ที่ ≤ latest → ใช้ latest_time แทน (capped)
+      latestTimeTotal = statMinutes + intervalMinutes;
+      let bestCandidate = null;
+      // ค้นหาภายใน 2 วัน เพื่อรองรับกรณี wrap around
+      for (let day = 0; day < 2; day++) {
+        for (const st of standardTimes) {
+          const candidate = st + day * 1440;
+          // ต้องอยู่ในช่วง (statMinutes, latestTimeTotal]
+          if (candidate > statMinutes && candidate <= latestTimeTotal) {
+            // เก็บ candidate ที่ใหญ่ที่สุด (ใกล้ latest มากที่สุด)
+            if (bestCandidate === null || candidate > bestCandidate) {
+              bestCandidate = candidate;
+            }
+          }
         }
       }
-      if (nextDoseMin !== null) break;
+
+      if (bestCandidate !== null) {
+        // ใช้ standard time
+        nextDoseMin = bestCandidate % 1440;
+        nextDoseIsNextDay = bestCandidate >= 1440;
+        cappedAtLatest = false;
+      } else {
+        // ไม่มี standard time ที่อยู่ในช่วง → ใช้ latest_time (capped)
+        nextDoseMin = latestTimeTotal % 1440;
+        nextDoseIsNextDay = latestTimeTotal >= 1440;
+        cappedAtLatest = true;
+      }
+    } else {
+      // Mode ปกติ + exception อื่นๆ ที่ใช้ standard time: หา standard time แรกที่ >= earliestNext
+      for (let day = 0; day < 2; day++) {
+        for (const st of standardTimes) {
+          const candidate = st + day * 1440;
+          if (candidate >= earliestNext) {
+            nextDoseMin = candidate % 1440;
+            nextDoseIsNextDay = day === 1 || (day === 0 && nextDoseMin < statMinutes && earliestNext > statMinutes);
+            break;
+          }
+        }
+        if (nextDoseMin !== null) break;
+      }
+      if (nextDoseMin === null) { nextDoseMin = standardTimes[0]; nextDoseIsNextDay = true; }
     }
-    if (nextDoseMin === null) { nextDoseMin = standardTimes[0]; nextDoseIsNextDay = true; }
 
-    // หา index ของ next dose ใน standardTimes
+    // ============================================================
+    // FINAL VALIDATION STEP (Beta-lactam)
+    // ============================================================
+    // 1. next_dose_time MUST be > stat_time
+    // 2. next_dose_time MUST be ≤ latest_time (stat + full interval)
+    // 3. ถ้าผิด → REJECT and recompute โดยใช้ latest_time
+    // ============================================================
+    let validationMessage = '';
+
+    if (isException && selectedCategory === 'betalactam') {
+      const expectedLatest = statMinutes + intervalMinutes;
+      const actualTotal = nextDoseIsNextDay ? nextDoseMin + 1440 : nextDoseMin;
+
+      // Check 1: next must be > stat
+      // Check 2: next must be ≤ latest
+      if (actualTotal <= statMinutes || actualTotal > expectedLatest) {
+        // VALIDATION FAILED → recompute using latest_time
+        console.warn('[VALIDATION FAILED] Beta-lactam: actual ' + formatTime(nextDoseMin) +
+                     ' (total=' + actualTotal + ') is outside (stat, latest] = (' +
+                     statMinutes + ', ' + expectedLatest + ']. Recomputing to latest_time...');
+        nextDoseMin = expectedLatest % 1440;
+        nextDoseIsNextDay = expectedLatest >= 1440;
+        cappedAtLatest = true;
+        validationMessage = '⚠ Validation: recomputed to latest_time (' + formatTime(nextDoseMin) + ')';
+      } else {
+        if (cappedAtLatest) {
+          validationMessage = '✓ Validation passed: capped at latest_time = stat + ' + selectedFreq + ' ชม.';
+        } else {
+          const hoursFromStat = ((actualTotal - statMinutes) / 60).toFixed(1);
+          validationMessage = '✓ Validation passed: aligned to standard time (' + hoursFromStat + ' ชม. หลัง stat, ≤ ' + selectedFreq + ' ชม.)';
+        }
+      }
+    }
+
     let nextIdx = standardTimes.indexOf(nextDoseMin);
-
-    // Display
     const nextTimeStr = formatTime(nextDoseMin);
-    document.getElementById('nextDoseTime').textContent = nextTimeStr + ' น.';
-    document.getElementById('nextDoseNote').textContent = nextDoseIsNextDay ? '(วันถัดไป)' : '(วันเดียวกัน)';
+    const nextDoseTimeEl = document.getElementById('nextDoseTime');
+    nextDoseTimeEl.textContent = nextTimeStr + ' น.';
+    nextDoseTimeEl.classList.toggle('exception', isException);
 
-    // Build timeline
+    document.getElementById('resultTitle').textContent =
+      isException ? '⏰ Dose ถัดไป (ใช้ Rule พิเศษ)' : '⏰ Dose ถัดไป (Next Scheduled Dose)';
+
+    document.getElementById('nextDoseNote').textContent =
+      nextDoseIsNextDay ? '(วันถัดไป)' : '(วันเดียวกัน)';
+
     const timeline = document.getElementById('timeline');
     timeline.innerHTML = '';
     addTimelineItem(timeline, 'Stat dose', formatTime(statMinutes), 'stat');
-    addTimelineItem(timeline, 'Dose ถัดไป', nextTimeStr + (nextDoseIsNextDay ? ' (+1)' : ''), 'next');
+    addTimelineItem(timeline, 'Dose ถัดไป', nextTimeStr + (nextDoseIsNextDay ? ' (+1)' : ''), 'next', isException);
 
-    // doses ต่อจากนั้นตาม standard schedule
     const maxExtra = Math.min(Math.floor(24 / selectedFreq), 5);
-    for (let i = 1; i <= maxExtra; i++) {
-      const idx = (nextIdx + i) % standardTimes.length;
-      const isOver = (nextIdx + i) >= standardTimes.length;
-      addTimelineItem(timeline, 'Dose #' + (i + 2), formatTime(standardTimes[idx]) + (isOver ? ' (+1)' : ''), 'regular');
+    if (isCapToLatest && cappedAtLatest) {
+      // Beta-lactam capped: doses ถัดไปจาก latest_time → align กลับเข้า standard schedule
+      // ใช้ standard time ถัดไปที่ >= nextDoseMin
+      let cursor = nextDoseIsNextDay ? nextDoseMin + 1440 : nextDoseMin;
+      for (let i = 1; i <= maxExtra; i++) {
+        cursor += intervalMinutes;
+        const isOver = cursor >= 1440;
+        const dayOffset = Math.floor(cursor/1440);
+        addTimelineItem(timeline, 'Dose #' + (i + 2), formatTime(cursor) + (isOver ? ' (+' + dayOffset + ')' : ''), 'regular');
+      }
+    } else {
+      // Mode ปกติ + Beta-lactam ที่ align กับ standard time: ใช้ standard schedule
+      let nextIdxLocal = standardTimes.indexOf(nextDoseMin);
+      if (nextIdxLocal === -1) nextIdxLocal = 0;
+      for (let i = 1; i <= maxExtra; i++) {
+        const idx = (nextIdxLocal + i) % standardTimes.length;
+        const isOver = (nextIdxLocal + i) >= standardTimes.length;
+        addTimelineItem(timeline, 'Dose #' + (i + 2), formatTime(standardTimes[idx]) + (isOver ? ' (+1)' : ''), 'regular');
+      }
     }
 
-    // Explanation
-    const twoThirdsHours = twoThirds / 60;
-    const twoThirdsDisplay = Number.isInteger(twoThirdsHours) ? twoThirdsHours : twoThirdsHours.toFixed(1);
-    document.getElementById('explanation').innerHTML =
-      `<strong>หลักการ (ตามตำรา):</strong> ยาสั่ง <strong>q ${selectedFreq}h</strong> → interval = ${selectedFreq} ชม.<br>` +
-      `2/3 ของ interval = <strong>${twoThirdsDisplay} ชม. (${twoThirds} นาที)</strong> <span class="rule-tag">กฎ 2/3</span><br><br>` +
-      `Stat dose ให้เวลา <strong>${formatTime(statMinutes)} น.</strong><br>` +
-      `Stat + 2/3 interval = ${formatTime(statMinutes)} + ${twoThirdsDisplay} ชม. = <strong>${formatTime(earliestNext)} น.</strong><br>` +
-      `→ หา Standard time แรกที่ ≥ เวลานั้น = <strong>${nextTimeStr} น.</strong><br>` +
-      `→ นับ dose ต่อไปตาม standard schedule ปกติ<br><br>` +
-      `<strong>Standard times q ${selectedFreq}h:</strong> ${getStandardTimesFormatted(selectedFreq).join(', ')} น.`;
+    let exp;
+    if (isException) {
+      const info = categoryInfo[selectedCategory];
+      if (isCapToLatest) {
+        // Beta-lactam: align กับ standard schedule แต่ cap ที่ latest_time
+        const latestTimeStr = formatTime(latestTimeTotal % 1440);
+        const latestIsNextDay = latestTimeTotal >= 1440;
+        const alignmentNote = cappedAtLatest
+          ? `<strong style="color: var(--warning)">⚡ Capped at latest_time</strong> (ไม่มี standard time ในช่วงที่อนุญาต → ใช้ latest_time แทน เพื่อไม่ delay เกิน full interval)`
+          : `<strong style="color: var(--success)">✓ Aligned to standard schedule</strong> (เลือก standard time ล่าสุดที่ ≤ latest_time)`;
 
-    // Show results
+        exp = `<strong>หลักการ (Beta-lactam Rule):</strong> ${info.name} <span class="rule-tag exception">${info.icon} Time-dependent</span><br>` +
+              `${info.rule}<br><br>` +
+              `<strong>Step 1:</strong> Interval = q${selectedFreq}h<br>` +
+              `<strong>Step 2:</strong> Latest allowable time = stat + ${selectedFreq} ชม. = <strong>${latestTimeStr} น.</strong>${latestIsNextDay ? ' (+1)' : ''}<br>` +
+              `<strong>Step 3:</strong> เลือก standard time ล่าสุดที่ ≤ latest_time<br>` +
+              `→ Next dose = <strong>${nextTimeStr} น.</strong>${nextDoseIsNextDay ? ' (+1)' : ''}<br><br>` +
+              `${alignmentNote}<br><br>` +
+              `<strong>Standard times q ${selectedFreq}h:</strong> ${getStandardTimesFormatted(selectedFreq).join(', ')} น.<br>` +
+              `<strong>Rationale:</strong> ${info.rationale}<br><br>` +
+              (validationMessage ? `<div style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:6px;padding:8px 10px;margin:8px 0;color:var(--success);font-size:0.8rem;font-weight:600">${validationMessage}</div>` : '') +
+              `<strong style="color: var(--warning)">⚠️ กรุณายืนยันคำสั่งการรักษากับแพทย์/protocol โรงพยาบาลเสมอ</strong>`;
+      } else {
+        exp = `<strong>หลักการ (Rule พิเศษ):</strong> ${info.name} <span class="rule-tag exception">${info.icon} Exception</span><br>` +
+              `${info.rule}<br><br>` +
+              `Stat dose ที่ <strong>${formatTime(statMinutes)} น.</strong><br>` +
+              `${ruleDescription} = <strong>${formatTime(earliestNext)} น.</strong><br>` +
+              `→ Standard time แรกที่ ≥ เวลานั้น = <strong>${nextTimeStr} น.</strong><br><br>` +
+              `<strong>Standard times q ${selectedFreq}h:</strong> ${getStandardTimesFormatted(selectedFreq).join(', ')} น.<br><br>` +
+              `<strong style="color: var(--warning)">⚠️ กรุณายืนยันคำสั่งการรักษากับแพทย์/protocol โรงพยาบาลเสมอ</strong>`;
+      }
+    } else {
+      const twoThirds = Math.round(intervalMinutes * 2 / 3);
+      const tt = twoThirds / 60;
+      const ttDisplay = Number.isInteger(tt) ? tt : tt.toFixed(1);
+      exp = `<strong>หลักการ (2/3 Rule):</strong> ยาสั่ง <strong>q ${selectedFreq}h</strong> → interval = ${selectedFreq} ชม.<br>` +
+            `2/3 ของ interval = <strong>${ttDisplay} ชม. (${twoThirds} นาที)</strong> <span class="rule-tag">กฎ 2/3</span><br><br>` +
+            `Stat dose ที่ <strong>${formatTime(statMinutes)} น.</strong><br>` +
+            `Stat + 2/3 interval = <strong>${formatTime(earliestNext)} น.</strong><br>` +
+            `→ Standard time แรกที่ ≥ เวลานั้น = <strong>${nextTimeStr} น.</strong><br><br>` +
+            `<strong>Standard times q ${selectedFreq}h:</strong> ${getStandardTimesFormatted(selectedFreq).join(', ')} น.`;
+    }
+    document.getElementById('explanation').innerHTML = exp;
+
     const resultSection = document.getElementById('resultSection');
     resultSection.classList.remove('show');
     void resultSection.offsetWidth;
     resultSection.classList.add('show');
+
+    setTimeout(() => {
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   }
 
-  function addTimelineItem(container, label, time, type) {
+  function addTimelineItem(container, label, time, type, exception = false) {
     const item = document.createElement('div');
     item.className = 'timeline-item';
 
-    const numClass = type === 'stat' ? 'stat' : type === 'next' ? 'next' : 'regular';
+    const numClass = type === 'stat' ? 'stat' : type === 'next' ? ('next' + (exception ? ' exception' : '')) : 'regular';
     const icon = type === 'stat' ? '⚡' : type === 'next' ? '→' : '•';
-    const labelClass = type === 'stat' ? 'stat-label' : type === 'next' ? 'next-label' : '';
-    const timeClass = type === 'stat' ? 'stat-time' : type === 'next' ? 'next-time' : '';
+    const labelClass = type === 'stat' ? 'stat-label' : type === 'next' ? ('next-label' + (exception ? ' exception' : '')) : '';
+    const timeClass = type === 'stat' ? 'stat-time' : type === 'next' ? ('next-time' + (exception ? ' exception' : '')) : '';
 
     item.innerHTML = `
       <div class="dose-num ${numClass}">${icon}</div>
@@ -585,7 +1025,6 @@
     container.appendChild(item);
   }
 
-  // Set default time to now
   setNow();
 </script>
 
